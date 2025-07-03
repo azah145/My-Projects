@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 use std::env;
 use std::io::{self, Write};
 
-#[derive(Serialize, Deserialize)]            // <-- added Deserialize
+#[derive(Serialize, Deserialize)]            
 struct ContentPart {
     text: String,
 }
@@ -42,7 +42,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = env::var("GEMINI_API_KEY")
         .expect("GEMINI_API_KEY not set in .env");
 
-    // ─── Read multiline user input ────────────────────────────────────────────────
+    // ── Read multiline user input ──
     let mut user_input = String::new();
     println!("Enter text to paraphrase. Once you enter your text, hit enter again:");
     loop {
@@ -61,7 +61,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // ─── Build Gemini prompt ──────────────────────────────────────────────────────
+    // ─── Build Gemini prompt ────
     let prompt = format!(
         "Paraphrase and improve the following text. Keep the meaning but enhance clarity and grammar:\n\n{}",
         user_input.trim()
@@ -74,7 +74,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }],
     };
 
-    // ─── Send request ─────────────────────────────────────────────────────────────
+    // ─── Send request ────
     let client = Client::new();
     let url = format!(
         "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={}",
@@ -92,7 +92,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // ─── Parse response ───────────────────────────────────────────────────────────
+    // ─── Parse response ───
     let json: GeminiResponse = response.json().await?;
 
     if let Some(first) = json.candidates.first() {
